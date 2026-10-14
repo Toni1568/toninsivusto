@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toninsivusto ⚡</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:#f8fafc;font-family:Arial,sans-serif}
+header,main,footer{max-width:850px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263047}
+.logo{font-size:22px;font-weight:900;color:#c4b5fd}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+button{background:#7c3aed;color:white;border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(1.2)}
+nav button{background:#20283b}
+.hero,.card{background:#151c2d;border:1px solid #29334a;border-radius:18px;padding:25px;margin:18px 0}
+.hero{background:linear-gradient(135deg,#241448,#111c32)}
+h1{font-size:clamp(32px,7vw,52px);margin:12px 0}
+h2{margin-top:0}
+p{color:#bac5da;line-height:1.6}
+.result{padding:25px 8px;text-align:center;font-size:clamp(23px,5vw,34px);font-weight:bold;color:#c4b5fd;overflow-wrap:anywhere}
+.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+.numbers button{background:#28334c}
+footer{text-align:center;color:#78849c;font-size:13px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡ TONINSIVUSTO</div>
+  <nav>
+    <button onclick="show('random')">Random</button>
+    <button onclick="show('game')">Peli</button>
+    <button onclick="show('ton')">Toni</button>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <p>TERVETULOA TONIN SIVULLE</p>
+    <h1>Tylsyys loppuu tähän.</h1>
+    <p>Random-juttuja, pelejä ja täysin turhaa hauskuutta.</p>
+    <button onclick="show('random')">🚀 Aloita hauskanpito</button>
+  </section>
+
+  <section id="random" class="card">
+    <h2>🎲 Random-generaattori</h2>
+    <p>Paina nappia ja katso, mitä saat!</p>
+    <div id="result" class="result">Märkä sukka</div>
+    <button onclick="randomize()">ARVO JOTAIN</button>
+  </section>
+
+  <section id="game" class="card" hidden>
+    <h2>🎯 Arvaa numero</h2>
+    <p>Arvaa numero väliltä 1–10.</p>
+    <div id="message" class="result">Valmis? Aloita arvaaminen!</div>
+    <div id="numbers" class="numbers"></div>
+    <p>Pisteet: <strong id="score">0</strong></p>
+    <button onclick="newGame()">Uusi peli</button>
+  </section>
+
+  <section id="ton" class="card" hidden>
+    <h2>😎 Tonin valtakunta</h2>
+    <p>Tervetuloa Tonin omalle sivulle. Täällä tylsyys ei voita!</p>
+    <div class="result">👑 TONI</div>
+    <button onclick="levelUp()">Nosta Tonin tasoa</button>
+    <p>Taso: <strong id="level">0</strong></p>
+  </section>
+</main>
+<footer>TONINSIVUSTO · Tehty huvikseen 💜</footer>
+<script>
+const things=[
+"Ketsuppi","Jorma","Lentävä peruna","Märkä sukka",
+"Örkki","Kaalikääryle","Pesukarhu","Pyykkipoika",
+"Ruosteinen lusikka","Avaruusmakkara","Varvas",
+"Sininen ämpäri","Hämmentynyt lokki","Juustohöylä",
+"Näkymätön hevonen","Traktori","Mikroaaltouuni",
+"Rikkinäinen kaukosäädin","Kummitus","Kultainen kurkku",
+"Robotti","Hattu","Tomaatti","Pölynimuri","Sammakko"
+];
+function show(id){
+ document.querySelectorAll('main section.card').forEach(s=>s.hidden=true);
+ document.getElementById(id).hidden=false;
+}
+function randomize(){
+ document.getElementById('result').textContent=
+ things[Math.floor(Math.random()*things.length)];
+}
+let answer,score=0,level=0;
+function newGame(){
+ answer=Math.floor(Math.random()*10)+1;
+ document.getElementById('message').textContent='Arvaa numero!';
+}
+function guess(n){
+ const m=document.getElementById('message');
+ if(n===answer){
+  score++;
+  document.getElementById('score').textContent=score;
+  m.textContent='Oikein! 🎉 Piste sinulle!';
+  answer=Math.floor(Math.random()*10)+1;
+ }else{
+  m.textContent=n<answer?'Liian pieni! ⬆️':'Liian suuri! ⬇️';
+ }
+}
+document.getElementById('numbers').innerHTML=
+ Array.from({length:10},(_,i)=>
+ `<button onclick="guess(${i+1})">${i+1}</button>`).join('');
+function levelUp(){
+ level++;
+ document.getElementById('level').textContent=level;
+}
+newGame();
+</script>
+</body>
+</html>
